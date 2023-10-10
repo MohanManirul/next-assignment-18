@@ -18,7 +18,7 @@ model user{
   email           String    @unique @db.VarChar(50)
   mobile          String    @unique @db.VarChar(50)
   passwordHash    String 
-  registeredAt    DateTime 
+  registeredAt    DateTime  @default(now()) @db.Timestamp(0)
   lastLogin       DateTime 
   intro           String    @db.TinyText
   profile         String    @db.Text

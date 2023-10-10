@@ -5,60 +5,55 @@ import { PrismaClient } from '@prisma/client'
 // find many query
 
 export async function GET(){
+    BigInt.prototype.toJSON = function () {
+        return this.toString();
+      };
     try{
         const prisma = new PrismaClient();
         
         let result = await prisma.user.findMany();
-        return NextResponse.json({status:"success"});
+        return NextResponse.json({status:"success", data:result});
     }catch(err){
-        return NextResponse.json({status:"Fail" , data:err});
+        return NextResponse.json({status:"Fail" , data:err.toString()});
     }
 }
 
 
 //insert single data
 export async function POST(req , res){
+    BigInt.prototype.toJSON = function () {
+        return this.toString();
+      };
     try{
         const prisma = new PrismaClient();
-        const reqData = await req.json();
-    let result = await prisma.user.create(
-                
-    {  data : {
-            "firstName" : "Md",
-            "middleName" : "Manirul",
-            "lastName" : "Islam",
-            "email" : "fiforeg@gmail.com",
-            "mobile" : "01915985336" ,
-            "passwordHash" : "123@123",
-            "registeredAt" : 2023-10-10 12:27:25,
-            "intro" : "Learner of next js Learner of next js Learner of next js Learner of next js",
-            "profile" : "Learner of next js Learner of next js Learner of next js Learner of next js Learner of next js Learner of next js Learner of next js Learner of next js"
-        }}
-        
-        )
+        const reqBody = await req.json();     
 
-        return NextResponse.json({ status: 'Success' });
+
+    let result = await prisma.user.create( {
+        data: {...reqBody, lastLogin: new Date(reqBody.lastLogin).toISOString()}
+    } )
+
+        return NextResponse.json({ status: 'Success' , data:result });
     }catch(err){
-        return NextResponse.json({status:"Fail" , data:err});
+        return NextResponse.json({status:"Fail" , data:err.toString()});
     }
 }
 
 // //update query
-export async function PUT(){
+export async function PUT(req, res){
+    BigInt.prototype.toJSON = function () {
+        return this.toString();
+      };
     try{
      const prisma = new PrismaClient();
-
-    let result = await prisma.category.update({
-        where:{id:1},
-       data: { 
-        title:"Electronics Update",
-        metaTitle:"electronics-update",
-        
-        }
+     const reqBody = await req.json(); 
+    let result = await prisma.user.update({
+        where : { id : 1 },
+        data: {...reqBody, lastLogin: new Date(reqBody.lastLogin).toISOString()}
     });
-        return NextResponse.json({status:"Success"});
+        return NextResponse.json({status:"Success" , data:result});
     }catch(err){
-        return NextResponse.json({status:"Fail" , data:err});
+        return NextResponse.json({status:"Fail" , data:err.toString()});
     }
 }
 
