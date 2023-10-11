@@ -5,19 +5,25 @@ import { PrismaClient } from '@prisma/client'
 // find many query
 
 export async function GET(){
+    BigInt.prototype.toJSON = function () {
+        return this.toString();
+      };
     try{
         const prisma = new PrismaClient();
         
         let result = await prisma.category.findMany();
-        return NextResponse.json({status:"success"});
+        return NextResponse.json({status:"success", data:result});
     }catch(err){
-        return NextResponse.json({status:"Fail" , data:err});
+        return NextResponse.json({status:"Fail" , data:err.toString()});
     }
 }
 
 
 //insert single data
 export async function POST(req , res){
+    BigInt.prototype.toJSON = function () {
+        return this.toString();
+      };
     try{
         const prisma = new PrismaClient();
         const reqData = await req.json();
@@ -29,15 +35,18 @@ export async function POST(req , res){
         
         )
 
-        return NextResponse.json({ status: 'Success' });
+        return NextResponse.json({ status: 'Success', data:result });
     }catch(err){
-        return NextResponse.json({status:"Fail" , data:err});
+        return NextResponse.json({status:"Fail" , data:err.toString()});
     }
 }
 
 // //update query
 export async function PUT(){
     try{
+        BigInt.prototype.toJSON = function () {
+            return this.toString();
+          };
      const prisma = new PrismaClient();
 
     let result = await prisma.category.update({
@@ -48,9 +57,9 @@ export async function PUT(){
         
         }
     });
-        return NextResponse.json({status:"Success"});
+        return NextResponse.json({status:"Success", data:result});
     }catch(err){
-        return NextResponse.json({status:"Fail" , data:err});
+        return NextResponse.json({status:"Fail" , data:err.toString()});
     }
 }
 
@@ -58,16 +67,19 @@ export async function PUT(){
  
 //delete query
 export async function DELETE(){
+    BigInt.prototype.toJSON = function () {
+        return this.toString();
+      };
     try{
      const prisma = new PrismaClient();
 
     let result = await prisma.category.delete({
-        where:{id:6}
+        where:{id:1}
       
     });
-        return NextResponse.json({status:"Success"});
+        return NextResponse.json({status:"Success",data:result});
     }catch(err){
-        return NextResponse.json({status:"Fail" , data:err});
+        return NextResponse.json({status:"Fail" , data:err.toString()});
     }
 }
 

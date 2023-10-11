@@ -61,16 +61,20 @@ export async function PUT(req, res){
  
 //delete query
 export async function DELETE(){
+    BigInt.prototype.toJSON = function () {
+        return this.toString();
+      };
+
     try{
      const prisma = new PrismaClient();
 
-    let result = await prisma.category.delete({
-        where:{id:6}
+    let result = await prisma.user.delete({
+        where:{id:1}
       
     });
-        return NextResponse.json({status:"Success"});
+        return NextResponse.json({status:"Success", data:result});
     }catch(err){
-        return NextResponse.json({status:"Fail" , data:err});
+        return NextResponse.json({status:"Fail" , data:err.toString()});
     }
 }
 
